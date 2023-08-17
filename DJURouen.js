@@ -17,7 +17,7 @@ fs.createReadStream("./dataStations/dataRouen.csv")
     extractTemperatures(dataStation);
 });
 
-sortedTemperature = []
+let sortedTemperature = []
 const extractTemperatures = (result) => {
 
     result.forEach(element => {
@@ -51,7 +51,7 @@ const extractTemperatures = (result) => {
 
     let moyenneDJU = totalDJU / totalDays
 
-    console.log(8/moyenneDJU)
+    console.log(sortedTemperature)
 
     
 }
