@@ -1,0 +1,51 @@
+const fs = require("fs");
+const csvParser = require('csv-parser')
+
+
+fs.readFile("./dataStations/dataRouen.csv", "utf-8", (err, data) => {
+  if (err) console.log(err);
+  else console.log("all good");
+});
+let dataRouen = []
+
+const extractDate = (result) => {
+    for (let i=0;i<result.length;i++){
+        console.log(result.date)
+    }
+}
+
+const calculDJU = () => {
+
+}
+
+sortedTemperature = []
+const extractTemperatures = (result) => {
+    result.forEach(element => {
+        const date = element.date.split('T')[0];
+
+        if (!sortedTemperature[date]) {
+            sortedTemperature[date] = {
+              tmin: element.temperature,
+              tmax: element.temperature
+            };
+          } else {
+            // Update tmin and tmax if necessary
+            if (element.temperature < sortedTemperature[date].tmin) {
+              sortedTemperature[date].tmin = element.temperature;
+            }
+            if (element.temperature > sortedTemperature[date].tmax) {
+              sortedTemperature[date].tmax = element.temperature;
+            }
+          }
+      });
+    console.log(sortedTemperature)
+}
+
+fs.createReadStream("./dataStations/dataRouen.csv")
+  .pipe(csvParser({ separator: ';' }))
+  .on("data", (data) => {
+    dataRouen.push(data)
+})
+.on("end", () => {
+      extractTemperatures(dataRouen);
+  });
