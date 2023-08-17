@@ -1,0 +1,28 @@
+Méthode de calcul
+Un degré Jour est calculé à partir des températures météorologiques extrêmes du lieu de du jour J :
+Tn : température minimale du jour J mesurée à 2 mètres du sol sous abri et relevée entre J-1 (la veille) à 18h UTC
+Tx : température maximale du jour J mesurée à 2 mètres du sol sous abri et relevée entre J à 06h et J+1 (le lendemain) à 06h UTC
+S : seuil de température de référence choisi
+Moy = (Tn + Tx)/2 : Température Moyenne de la journée
+2 méthodes sont utilisées pour le calcul :
+
+Méthode météo
+
+Pour un calcul de déficits (chauffagiste) de température par rapport au seuil choisi :
+Si S <= Moy : DJ=0
+Si S > Moy : DJ = S – Moy
+Pour un calcul d’excédents (climaticien) de température par rapport au seuil choisi :
+Si S >= Moy : DJ = 0
+Si S < Moy : DJ=Moy – S
+Méthode Professionnels de l’énergie
+
+Cette méthode de calcul de Degrés Jour correspond à une formule adaptée aux besoins des sociétés d’exploitation de chauffage ou de climatisation (intéressant en début ou en fin de saison de chauffe/climatisation)
+Pour un calcul de déficits (chauffagiste) de température par rapport au seuil choisi :
+Si S > Tx (cas fréquent en hiver) : DJ = S – Moy
+Si S <= Tn (cas exceptionnel en début ou en fin de saison de chauffe) : DJ=0
+Si Tn < S <=Tx (cas possible en début ou en fin de saison de chauffe) : DJ=(S – Tn) * (0.08 + 0.42*(S – Tn) / (Tx – Tn))
+Pour un calcul d’excédents (climaticien) de température par rapport au seul choisi :
+Si S > Tx : DJ = 0
+Si S <= Tn : DJ=Moy – S
+Si Tn < S <=Tx : DJ=(Tx – S) * (0.08 +4.42 * (Tx – S) / (Tx – Tn))
+Les cumuls de Degrés Jour s’obtiennent de façon simple en additionnant les Degrés Jour quotidiens, obtenus par une des méthodes, sur la période de cumul souhaitée : semaine, mois ou période quelconque spécifiée par l’utilisateur au niveau de l’interface.
