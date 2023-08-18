@@ -6,9 +6,8 @@
     "csv-parse": "^5.4.0",
     "csv-parser": "^3.0.0",
     "csv-stringify": "^6.4.0",
-    "jquery": "^3.7.0",
-    "jquery-csv": "^1.0.21",
-    "node-csv": "^0.1.2"
+    "node-csv": "^0.1.2",
+    "prompt-sync": "^4.2.0"
   },
   "name": "calcul-dju-cyril",
   "version": "1.0.0",
