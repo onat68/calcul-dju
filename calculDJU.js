@@ -133,7 +133,7 @@ DJUMoyenDecennie = DJUMoyenDecennie / 10
 
 return DJUMoyenDecennie
 
-}
+}}
 
 
 const calculDJU = (tmin,tmax) => {
