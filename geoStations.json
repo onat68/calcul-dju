@@ -145,7 +145,7 @@
         "longitude":"0"
     },
     {
-        "name":"belle ile-le talut",
+        "name":"belle-ile-le talut",
         "latitude":"47.294333",
         "longitude":"-3.218333"
     },
@@ -160,12 +160,12 @@
         "longitude":"3.149333"
     },
     {
-        "name":"st girons",
+        "name":"stgirons",
         "latitude":"43.005333",
         "longitude":"1.106833"
     },
     {
-        "name":"st-pierre",
+        "name":"stpierre",
         "latitude":"46.766333",
         "longitude":"-56.179167"
     },
@@ -185,12 +185,12 @@
         "longitude":"3.963167"
     },
     {
-        "name":"le raizet aero",
+        "name":"raizet",
         "latitude":"16.264",
         "longitude":"-61.516333"
     },
     {
-        "name":"ploumanac'h",
+        "name":"ploumanach",
         "latitude":"48.825833",
         "longitude":"-3.473167"
     },
@@ -200,7 +200,7 @@
         "longitude":"3.0195"
     },
     {
-        "name":"le puy-loudes",
+        "name":"loudes",
         "latitude":"45.0745",
         "longitude":"3.764"
     },
@@ -210,12 +210,12 @@
         "longitude":"-60.995667"
     },
     {
-        "name":"pte de la hague",
+        "name":"hague",
         "latitude":"49.725167",
         "longitude":"-1.939833"
     },
     {
-        "name":"cap cepet",
+        "name":"cap-cepet",
         "latitude":"43.079333",
         "longitude":"5.940833"
     },
@@ -225,7 +225,7 @@
         "longitude":"55.528667"
     },
     {
-        "name":"pte de chassiron",
+        "name":"chassiron",
         "latitude":"46.046833",
         "longitude":"-1.4115"
     },
@@ -235,22 +235,22 @@
         "longitude":"70.243333"
     },
     {
-        "name":"nouvelle amsterdam",
+        "name":"nouvelleamsterdam",
         "latitude":"-37.795167",
         "longitude":"77.569167"
     },
     {
-        "name":"saint laurent",
+        "name":"saintlaurent",
         "latitude":"5.4855",
         "longitude":"-54.031667"
     },
     {
-        "name":"saint georges",
+        "name":"saintgeorges",
         "latitude":"3.890667",
         "longitude":"-51.804667"
     },
     {
-        "name":"dumont d'urville",
+        "name":"dumont-d'urville",
         "latitude":"-66.663167",
         "longitude":"140.001"
     },
@@ -295,17 +295,17 @@
         "longitude":"45.282833"
     },
     {
-        "name":"la desirade meteo",
+        "name":"desirade-meteo",
         "latitude":"16.335",
         "longitude":"-61.004"
     },
     {
-        "name":"st-barthelemy meteo",
+        "name":"barthelemy-meteo",
         "latitude":"17.9015",
         "longitude":"-62.852167"
     },
     {
-        "name":"juan de nova",
+        "name":"juan-de-nova",
         "latitude":"-17.054667",
         "longitude":"42.712"
     }

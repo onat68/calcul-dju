@@ -84,28 +84,6 @@ const extractTemperatures = (result) => {
     console.log('Moyenne décennie : ' , calculDJUDecennie(2021,2022))
     console.log('Facteur de correction : ', DJUMoyenLastWinter/DJUMoyenDecennie)
 
-// defYearRef()
-
-}
-
-// const defYearRef = () => {
-//   let validateYear = prompt("Utiliser l'hiver 2021/2022 comme référence ? : y/n ")
-//   if(validateYear =='y'){
-//     console.log('Moyenne décennie : ' , calculDJUDecennie(2021,2022))
-//   } else if (validateYear == 'n'){
-//     refYears = prompt('Définir année de référence (yy/yy) : ')
-//     if(parseInt(refYears.split('/')[0])!=parseInt(refYears.split('/')[1])-1){
-//       console.log('Entrer un format yy/yy valide')
-//       defYearRef()
-//     }
-//     else {
-//       console.log('Moyenne décennie : ', calculDJUDecennie((20+parseInt(refYears.split('/')[0]),(20+refYears.split('/')[1]))))
-//     }
-//   } else {
-//     defYearRef()
-//   }
-// }
-
 const extractWinterOf = (startYear,endYear) => {
   let arrayOfWinter = new Array()
 

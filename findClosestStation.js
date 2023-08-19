@@ -1,9 +1,9 @@
 const fs = require('fs')
 
-const JSONCommunes = fs.readFileSync("./geoCommunes.json", "utf8");
+const JSONCommunes = fs.readFileSync('calcul-dju/geoCommunes.json', "utf8");  //C:/Users/onatr/OneDrive/Documents/Ada/CalculDJU/calcul-dju/geoCommunes.json
 const JSCommunes = JSON.parse(JSONCommunes)
 
-const JSONStations = fs.readFileSync("./geoStations.json", "utf8");
+const JSONStations = fs.readFileSync("calcul-dju/geoStations.json", "utf8");
 const JSStations = JSON.parse(JSONStations)
 
 const checkDistance = (latitude,longitude) => {
