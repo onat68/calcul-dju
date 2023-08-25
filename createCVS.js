@@ -1,58 +1,57 @@
 const fs = require("fs");
 const csvParser = require("csv-parser");
 const prompt = require("prompt-sync")();
-let station = "";
-let dataStation = [];
+let stations = [];
 let sortedTemperature = [];
+let seuilRef = 18;
 
 const findClosestStation = () => {
-  let codePostal = prompt(">> Code postal : ");
-  let stations = new Array();
-
   const JSONCommunes = fs.readFileSync("./geoCommunes.json", "utf-8");
   const JSCommunes = JSON.parse(JSONCommunes);
 
-  JSCommunes.forEach((element) => {
-    if (element.postal == codePostal.toString()) {
-      if (!stations.includes(element.closestStation)) {
-        stations.push(element.closestStation);
+  const JSONStations = fs.readFileSync("./geoStations.json", "utf8");
+  const JSStations = JSON.parse(JSONStations);
+
+  JSStations.forEach((element) => {
+    // console.log(element.name)
+    JSCommunes.forEach((commune) => {
+      if (element.name == commune.closestStation) {
+        element.status = "ok";
       }
-      console.log(element);
+    });
+    if (element.status == "ok") {
+      stations.push(element.name);
     }
   });
 
-  if (stations.length == 0) {
-    console.log("Aucune ville trouvée");
-    findClosestStation();
-  } else {
-    for (let i = 0; i < stations.length; i++) {
-      console.log(i + 1, ": ", stations[i]);
-    }
+  JSStations.forEach((element) => {
+    if (stations.includes(element.name)) {
+        let station = element.name;
+        let stationForCSV =
+        station.split("-")[0].split("")[0].toUpperCase() +
+        station.split("-")[0].slice(1);
+        console.log(stationForCSV);
+        
+        if (fs.existsSync(`./dataStations/data${stationForCSV}.csv`)) { 
+            let dataStation = [];
 
-    station =
-      stations[prompt(">> Entrer le numéro de la station choisie : ") - 1];
-    console.log("Station choisie : " + station);
-  }
+
+        
+            fs.createReadStream(`./dataStations/data${stationForCSV}.csv`)
+            .pipe(csvParser({ separator: ";" }))
+            .on("data", (data) => {
+                dataStation.push(data);
+            })
+            .on("end", () => {
+                extractTemperatures(dataStation);
+                console.log(element.name, seuilRef, calculation());
+            });
+        }
+    }
+  });
 };
 
-// findClosestStation();
-
-let stationForCSV =
-  station.split("-")[0].split("")[0].toUpperCase() +
-  station.split("-")[0].slice(1);
-
-let seuilRef = prompt(">> Définir le seuil de référence en °C : ");
-
-fs.createReadStream(`./dataStations/data${stationForCSV}.csv`)
-  .pipe(csvParser({ separator: ";" }))
-  .on("data", (data) => {
-    dataStation.push(data);
-  })
-  .on("end", () => {
-    console.log(dataStation)
-    extractTemperatures(dataStation);
-    calculation();
-  });
+findClosestStation();
 
 const calculDJU = (tmin, tmax) => {
   let moyenneTemp = (tmin + tmax) / 2;
@@ -126,10 +125,6 @@ const calculDJUDecennie = (startDate, endDate) => {
   endDate = parseInt(endDate) - 10;
 
   for (let i = 0; i < 10; i++) {
-    console.log(
-      "Hiver " + (startDate + i) + "/" + (endDate + i),
-      calculDJUMoyen(extractWinterOf(startDate + i, endDate + i))
-    );
     DJUMoyenDecennie += calculDJUMoyen(
       extractWinterOf(startDate + i, endDate + i)
     );
@@ -142,13 +137,5 @@ const calculDJUDecennie = (startDate, endDate) => {
 const calculation = () => {
   let DJUMoyenLastWinter = calculDJUMoyen(extractWinterOf(2021, 2022));
   let DJUMoyenDecennie = calculDJUDecennie(2021, 2022);
-  console.log(
-    `DJU Hiver 2021/2022 (01 Novembre au 31 Mai) sur la station de ${station} : `,
-    DJUMoyenLastWinter
-  );
-  console.log("Moyenne décennie : ", DJUMoyenDecennie);
-  console.log(
-    "Facteur de correction : ",
-    DJUMoyenLastWinter / DJUMoyenDecennie
-  );
+  return DJUMoyenLastWinter / DJUMoyenDecennie;
 };

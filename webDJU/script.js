@@ -35,7 +35,7 @@ const findClosestStation = () => {
   }
 };
 
-// findClosestStation();
+findClosestStation();
 
 let stationForCSV =
   station.split("-")[0].split("")[0].toUpperCase() +
