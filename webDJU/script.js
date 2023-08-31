@@ -5,17 +5,17 @@ let station = "";
 let dataStation = [];
 let sortedTemperature = [];
 
-const resultatElement = document.getElementById("resultat");
+let resultatElement = document.getElementById("resultat");
+let postalField = document.getElementById("postal-field");
 const stationElement = document.getElementById("station");
-const postalField = document.getElementById("postal-field");
 const info = document.getElementById("infos");
-const input = document.getElementById("input")
+const input = document.getElementById("input");
 
 const findClosestStation = (codePostal) => {
+
   resultatElement.innerHTML = "";
   stationElement.innerHTML = "";
   let stations = new Array();
-  console.log(codePostal);
 
   fetch("../geoCommunes.json")
     .then((response) => response.json())
@@ -37,41 +37,63 @@ const findClosestStation = (codePostal) => {
                           <div class="form">
                           <input type="field" id="postal-field" />
                           </div>`;
-        input.addEventListener('keypress', function(e) {
+        input.addEventListener("keypress", function (e) {
           if (e.key === "Enter" && stations.includes(station)) {
-            seuilRef = postalField.value
-            startCalcul()
+            postalField = document.getElementById('postal-field')
+            seuilRef = postalField.value;
+            startCalcul();
           }
-        })
-
-
-        stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
-        stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
-        
-        firstChoice = document.getElementById('firstChoice');
-        secondChoice = document.getElementById('secondChoice');
-        
-        firstChoice.addEventListener("click", () => {
-          secondChoice.className = 'choice'
-          firstChoice.className = 'choice selected'
-          station = stations[0];
         });
-        secondChoice.addEventListener("click", () => {
-          firstChoice.className = 'choice'
-          secondChoice.className = 'choice selected'
-          station = stations[1];
-        });
+
+        if(stations[1]!=undefined){
+          stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
+          stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
+  
+          const firstChoice = document.getElementById("firstChoice");
+          const secondChoice = document.getElementById("secondChoice");
+  
+          firstChoice.addEventListener("click", () => {
+            secondChoice.className = "choice";
+            firstChoice.className = "choice selected";
+            station = stations[0];
+          });
+          secondChoice.addEventListener("click", () => {
+            firstChoice.className = "choice";
+            secondChoice.className = "choice selected";
+            station = stations[1];
+          });
+        }
+        else {
+          stationElement.innerHTML += `<div class="choice selected" id="uniqueChoice"><p class="choices">${stations[0]}</p></div>`
+          const uniqueChoice = document.getElementById('uniqueChoice')
+          uniqueChoice.style.height = '100%'
+          station = stations[0]
+        }
 
       }
     });
 };
 
-postalField.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    findClosestStation(postalField.value);
-    postalField.value = "";
-  }
-});
+const reinit = () => {
+  input.innerHTML = `<div class="info" id="infos">Code Postal</div>
+  <div class="form">
+  <input type="field" id="postal-field" />
+  </div>`;
+
+
+  
+  postalField = document.getElementById('postal-field')
+  postalField.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      console.log(postalField.value)
+      findClosestStation(postalField.value);
+    }
+  });
+  console.log(postalField)
+}
+
+reinit()
+
 
 
 function startCalcul() {
@@ -104,7 +126,7 @@ const calculDJU = (tmin, tmax) => {
 
 const extractTemperatures = (result) => {
   result.forEach((element) => {
-    if(element.date!=undefined){
+    if (element.date != undefined) {
       const date = element.date.split("T")[0];
 
       if (
@@ -134,8 +156,8 @@ const extractTemperatures = (result) => {
         }
       }
     }
-})
-}
+  });
+};
 
 const extractWinterOf = (startYear, endYear) => {
   let arrayOfWinter = new Array();
@@ -161,15 +183,17 @@ const calculDJUMoyen = (arrayOfDates) => {
 };
 
 const calculDJUDecennie = (startDate, endDate) => {
-  resultatElement.innerHTML = ""
+  resultatElement.innerHTML = "";
   let DJUMoyenDecennie = 0;
-  
+
   startDate = parseInt(startDate) - 10;
   endDate = parseInt(endDate) - 10;
-  
+
   for (let i = 0; i < 10; i++) {
-    let DJUMoyen = calculDJUMoyen(extractWinterOf(startDate + i, endDate + i))
-    resultatElement.innerHTML += `<div class="text hiver"><p>Hiver ${startDate + i}/${endDate + i} : ${DJUMoyen}</p></div>`
+    let DJUMoyen = calculDJUMoyen(extractWinterOf(startDate + i, endDate + i));
+    resultatElement.innerHTML += `<div class="text hiver"><p>Hiver ${
+      startDate + i
+    }/${endDate + i} : ${DJUMoyen}</p></div>`;
     DJUMoyenDecennie += calculDJUMoyen(
       extractWinterOf(startDate + i, endDate + i)
     );
