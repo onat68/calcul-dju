@@ -47,10 +47,10 @@ const findClosestStation = (codePostal) => {
 
         stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
         stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
-
+        
         firstChoice = document.getElementById('firstChoice');
         secondChoice = document.getElementById('secondChoice');
-
+        
         firstChoice.addEventListener("click", () => {
           secondChoice.className = 'choice'
           firstChoice.className = 'choice selected'
@@ -61,6 +61,7 @@ const findClosestStation = (codePostal) => {
           secondChoice.className = 'choice selected'
           station = stations[1];
         });
+
       }
     });
 };
@@ -87,22 +88,10 @@ function startCalcul() {
     },
     complete: function () {
       extractTemperatures(dataStation);
-      console.log(sortedTemperature)
       calculation();
     },
   });
 }
-
-// fs.createReadStream(`./dataStations/data${stationForCSV}.csv`)
-//   .pipe(csvParser({ separator: ";" }))
-//   .on("data", (data) => {
-//     dataStation.push(data);
-//   })
-//   .on("end", () => {
-//     console.log(dataStation)
-//     extractTemperatures(dataStation);
-//     calculation();
-//   });
 
 const calculDJU = (tmin, tmax) => {
   let moyenneTemp = (tmin + tmax) / 2;
@@ -115,46 +104,38 @@ const calculDJU = (tmin, tmax) => {
 
 const extractTemperatures = (result) => {
   result.forEach((element) => {
-    if(element.date==undefined){
-      result.splice(element)
-    }
-  })
-  result.forEach((element) => {
-    console.log('youhou')
-
+    if(element.date!=undefined){
       const date = element.date.split("T")[0];
 
-    if (
-      !sortedTemperature[date] &&
-      element.temperature &&
-      date.split("-")[0] != "2023"
-    ) {
-      sortedTemperature[date] = {
-        date: date,
-        tmin: parseFloat(element.temperature),
-        tmax: parseFloat(element.temperature),
-        DJU: calculDJU(
-          parseFloat(element.temperature),
-          parseFloat(element.temperature)
-        ),
-      };
-      console.log('ca')
-    } else if (element.temperature && date.split("-")[0] != "2023") {
-      console.log('cc')
-      if (parseFloat(element.temperature) < sortedTemperature[date].tmin) {
-        sortedTemperature[date].tmin = parseFloat(element.temperature);
-        sortedTemperature[date].DJU = calculDJU(
-          sortedTemperature[date].tmin,
-          sortedTemperature[date].tmax
-        );
-      }
-      if (parseFloat(element.temperature) > sortedTemperature[date].tmax) {
-        console.log('ce')
-        sortedTemperature[date].tmax = parseFloat(element.temperature);
+      if (
+        !sortedTemperature[date] &&
+        element.temperature &&
+        date.split("-")[0] != "2023"
+      ) {
+        sortedTemperature[date] = {
+          date: date,
+          tmin: parseFloat(element.temperature),
+          tmax: parseFloat(element.temperature),
+          DJU: calculDJU(
+            parseFloat(element.temperature),
+            parseFloat(element.temperature)
+          ),
+        };
+      } else if (element.temperature && date.split("-")[0] != "2023") {
+        if (parseFloat(element.temperature) < sortedTemperature[date].tmin) {
+          sortedTemperature[date].tmin = parseFloat(element.temperature);
+          sortedTemperature[date].DJU = calculDJU(
+            sortedTemperature[date].tmin,
+            sortedTemperature[date].tmax
+          );
+        }
+        if (parseFloat(element.temperature) > sortedTemperature[date].tmax) {
+          sortedTemperature[date].tmax = parseFloat(element.temperature);
+        }
       }
     }
-  });
-};
+})
+}
 
 const extractWinterOf = (startYear, endYear) => {
   let arrayOfWinter = new Array();
@@ -180,16 +161,15 @@ const calculDJUMoyen = (arrayOfDates) => {
 };
 
 const calculDJUDecennie = (startDate, endDate) => {
+  resultatElement.innerHTML = ""
   let DJUMoyenDecennie = 0;
-
+  
   startDate = parseInt(startDate) - 10;
   endDate = parseInt(endDate) - 10;
-
+  
   for (let i = 0; i < 10; i++) {
-    console.log(
-      "Hiver " + (startDate + i) + "/" + (endDate + i),
-      calculDJUMoyen(extractWinterOf(startDate + i, endDate + i))
-    );
+    let DJUMoyen = calculDJUMoyen(extractWinterOf(startDate + i, endDate + i))
+    resultatElement.innerHTML += `<div class="text hiver"><p>Hiver ${startDate + i}/${endDate + i} : ${DJUMoyen}</p></div>`
     DJUMoyenDecennie += calculDJUMoyen(
       extractWinterOf(startDate + i, endDate + i)
     );
@@ -202,10 +182,9 @@ const calculDJUDecennie = (startDate, endDate) => {
 const calculation = () => {
   let DJUMoyenLastWinter = calculDJUMoyen(extractWinterOf(2021, 2022));
   let DJUMoyenDecennie = calculDJUDecennie(2021, 2022);
-  resultatElement.innerHTML = "";
-  resultatElement.innerHTML += `DJU Hiver 2021/2022 (01 Novembre au 31 Mai) sur la station de ${station} : ${DJUMoyenLastWinter}`;
-  resultatElement.innerHTML += `Moyenne décennie : ${DJUMoyenDecennie}`;
-  resultatElement.innerHTML += `Facteur de correction : ${
+  resultatElement.innerHTML += `<div class="text"><p>DJU Hiver 2021/2022 (01 Novembre au 31 Mai) sur la station de ${station} : ${DJUMoyenLastWinter}</p></div>`;
+  resultatElement.innerHTML += `<div class="text"><p>Moyenne décennie : ${DJUMoyenDecennie}</p></div>`;
+  resultatElement.innerHTML += `<div class="text"><p>Facteur de correction : ${
     DJUMoyenLastWinter / DJUMoyenDecennie
-  }`;
+  }</p></div>`;
 };
