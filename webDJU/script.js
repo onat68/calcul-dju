@@ -1,58 +1,108 @@
-const fs = require("fs");
-const csvParser = require("csv-parser");
-const prompt = require("prompt-sync")();
+// const fs = require("fs");
+// const csvParser = require("csv-parser");
+// const prompt = require("prompt-sync")();
 let station = "";
 let dataStation = [];
 let sortedTemperature = [];
 
-const findClosestStation = () => {
-  let codePostal = prompt(">> Code postal : ");
+const resultatElement = document.getElementById("resultat");
+const stationElement = document.getElementById("station");
+const postalField = document.getElementById("postal-field");
+const info = document.getElementById("infos");
+const input = document.getElementById("input")
+
+const findClosestStation = (codePostal) => {
+  resultatElement.innerHTML = "";
+  stationElement.innerHTML = "";
   let stations = new Array();
+  console.log(codePostal);
 
-  const JSONCommunes = fs.readFileSync("./geoCommunes.json", "utf-8");
-  const JSCommunes = JSON.parse(JSONCommunes);
+  fetch("../geoCommunes.json")
+    .then((response) => response.json())
+    .then((JSCommunes) => {
+      JSCommunes.forEach((element) => {
+        if (element.postal == codePostal.toString()) {
+          if (!stations.includes(element.closestStation)) {
+            stations.push(element.closestStation);
+          }
+          resultatElement.innerHTML += `<p class="text">Commune : <strong>${element.name}  
+        </strong>closestStation : <strong>${element.closestStation}<strong></p>`;
+        }
+      });
 
-  JSCommunes.forEach((element) => {
-    if (element.postal == codePostal.toString()) {
-      if (!stations.includes(element.closestStation)) {
-        stations.push(element.closestStation);
+      if (stations.length == 0) {
+        info.innerHTML = "Aucune ville trouvée";
+      } else {
+        input.innerHTML = `<div class="info" id="infos">SeuilRef</div>
+                          <div class="form">
+                          <input type="field" id="postal-field" />
+                          </div>`;
+        input.addEventListener('keypress', function(e) {
+          if (e.key === "Enter" && stations.includes(station)) {
+            seuilRef = postalField.value
+            startCalcul()
+          }
+        })
+
+
+        stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
+        stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
+
+        firstChoice = document.getElementById('firstChoice');
+        secondChoice = document.getElementById('secondChoice');
+
+        firstChoice.addEventListener("click", () => {
+          secondChoice.className = 'choice'
+          firstChoice.className = 'choice selected'
+          station = stations[0];
+        });
+        secondChoice.addEventListener("click", () => {
+          firstChoice.className = 'choice'
+          secondChoice.className = 'choice selected'
+          station = stations[1];
+        });
       }
-      console.log(element);
-    }
-  });
-
-  if (stations.length == 0) {
-    console.log("Aucune ville trouvée");
-    findClosestStation();
-  } else {
-    for (let i = 0; i < stations.length; i++) {
-      console.log(i + 1, ": ", stations[i]);
-    }
-
-    station =
-      stations[prompt(">> Entrer le numéro de la station choisie : ") - 1];
-    console.log("Station choisie : " + station);
-  }
+    });
 };
 
-findClosestStation();
+postalField.addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    findClosestStation(postalField.value);
+    postalField.value = "";
+  }
+});
 
-let stationForCSV =
-  station.split("-")[0].split("")[0].toUpperCase() +
-  station.split("-")[0].slice(1);
 
-let seuilRef = prompt(">> Définir le seuil de référence en °C : ");
+function startCalcul() {
+  let stationForCSV =
+    station.split("-")[0].split("")[0].toUpperCase() +
+    station.split("-")[0].slice(1);
 
-fs.createReadStream(`./dataStations/data${stationForCSV}.csv`)
-  .pipe(csvParser({ separator: ";" }))
-  .on("data", (data) => {
-    dataStation.push(data);
-  })
-  .on("end", () => {
-    console.log(dataStation)
-    extractTemperatures(dataStation);
-    calculation();
+  Papa.parse(`../dataStations/data${stationForCSV}.csv`, {
+    download: true,
+    header: true,
+    delimiter: ";",
+    step: function (data) {
+      dataStation.push(data.data);
+    },
+    complete: function () {
+      extractTemperatures(dataStation);
+      console.log(sortedTemperature)
+      calculation();
+    },
   });
+}
+
+// fs.createReadStream(`./dataStations/data${stationForCSV}.csv`)
+//   .pipe(csvParser({ separator: ";" }))
+//   .on("data", (data) => {
+//     dataStation.push(data);
+//   })
+//   .on("end", () => {
+//     console.log(dataStation)
+//     extractTemperatures(dataStation);
+//     calculation();
+//   });
 
 const calculDJU = (tmin, tmax) => {
   let moyenneTemp = (tmin + tmax) / 2;
@@ -65,7 +115,14 @@ const calculDJU = (tmin, tmax) => {
 
 const extractTemperatures = (result) => {
   result.forEach((element) => {
-    const date = element.date.split("T")[0];
+    if(element.date==undefined){
+      result.splice(element)
+    }
+  })
+  result.forEach((element) => {
+    console.log('youhou')
+
+      const date = element.date.split("T")[0];
 
     if (
       !sortedTemperature[date] &&
@@ -81,7 +138,9 @@ const extractTemperatures = (result) => {
           parseFloat(element.temperature)
         ),
       };
+      console.log('ca')
     } else if (element.temperature && date.split("-")[0] != "2023") {
+      console.log('cc')
       if (parseFloat(element.temperature) < sortedTemperature[date].tmin) {
         sortedTemperature[date].tmin = parseFloat(element.temperature);
         sortedTemperature[date].DJU = calculDJU(
@@ -90,6 +149,7 @@ const extractTemperatures = (result) => {
         );
       }
       if (parseFloat(element.temperature) > sortedTemperature[date].tmax) {
+        console.log('ce')
         sortedTemperature[date].tmax = parseFloat(element.temperature);
       }
     }
@@ -142,13 +202,10 @@ const calculDJUDecennie = (startDate, endDate) => {
 const calculation = () => {
   let DJUMoyenLastWinter = calculDJUMoyen(extractWinterOf(2021, 2022));
   let DJUMoyenDecennie = calculDJUDecennie(2021, 2022);
-  console.log(
-    `DJU Hiver 2021/2022 (01 Novembre au 31 Mai) sur la station de ${station} : `,
-    DJUMoyenLastWinter
-  );
-  console.log("Moyenne décennie : ", DJUMoyenDecennie);
-  console.log(
-    "Facteur de correction : ",
+  resultatElement.innerHTML = "";
+  resultatElement.innerHTML += `DJU Hiver 2021/2022 (01 Novembre au 31 Mai) sur la station de ${station} : ${DJUMoyenLastWinter}`;
+  resultatElement.innerHTML += `Moyenne décennie : ${DJUMoyenDecennie}`;
+  resultatElement.innerHTML += `Facteur de correction : ${
     DJUMoyenLastWinter / DJUMoyenDecennie
-  );
+  }`;
 };
