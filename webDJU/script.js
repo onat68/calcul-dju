@@ -104,23 +104,6 @@ function createStationElement() {
     uniqueChoice.style.height = '100%'
     station = stations[0]
   }
-
-  // stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
-  // stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
-
-  // firstChoice = document.getElementById("firstChoice");
-  // secondChoice = document.getElementById("secondChoice");
-
-  // firstChoice.addEventListener("click", () => {
-  //   secondChoice.className = "choice";
-  //   firstChoice.className = "choice selected";
-  //   station = stations[0];
-  // });
-  // secondChoice.addEventListener("click", () => {
-  //   firstChoice.className = "choice";
-  //   secondChoice.className = "choice selected";
-  //   station = stations[1];
-  // });
 }
 
 function startCalcul() {
