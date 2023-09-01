@@ -5,15 +5,26 @@ let stationElement = document.getElementById("station");
 let postalField = document.getElementById("postal-field");
 let info = document.getElementById("infos");
 let input = document.getElementById("input");
+let reloadButton = document.getElementsByClassName("reload-button")[0];
 
-reset()
+reset();
 
-function reset () {
+function reset() {
   resultatElement = document.getElementById("resultat");
   stationElement = document.getElementById("station");
+  input = document.getElementById("input");
+  resultatElement.innerHTML = "";
+  stationElement.innerHTML = "";
+  input.innerHTML =
+    '<div class="info" id="infos">Code postal</div><div class="form"><input type="field" id="postal-field" /></div>';
   postalField = document.getElementById("postal-field");
   info = document.getElementById("infos");
-  input = document.getElementById("input");
+
+  reloadButton = document.getElementsByClassName("reload-button")[0];
+
+  reloadButton.addEventListener("click", () => {
+    reset();
+  });
 
   postalField.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
@@ -23,9 +34,7 @@ function reset () {
   });
 }
 
-function findClosestStation (codePostal) {
-  resultatElement.innerHTML = "";
-  stationElement.innerHTML = "";
+function findClosestStation(codePostal) {
   stations = new Array();
   console.log(codePostal);
 
@@ -44,13 +53,12 @@ function findClosestStation (codePostal) {
       displayStationElements();
       return stations;
     });
-};
+}
 
 function displayStationElements() {
-
   if (stations.length == 0) {
     info.innerHTML = "Aucune ville trouvée";
-    return
+    return;
   }
 
   input.innerHTML = `<div class="info" id="infos">SeuilRef</div>
@@ -59,11 +67,12 @@ function displayStationElements() {
   </div>`;
 
   createStationElement();
-    
+
   input.addEventListener("keypress", function (e) {
     if (e.key === "Enter" && stations.includes(station)) {
       const postalField = document.getElementById("postal-field");
       seuilRef = postalField.value;
+      console.log(seuilRef);
       startCalcul();
     }
   });
@@ -93,7 +102,7 @@ function startCalcul() {
     station.split("-")[0].split("")[0].toUpperCase() +
     station.split("-")[0].slice(1);
 
-  let dataStation = new Array()
+  let dataStation = new Array();
   Papa.parse(`../dataStations/data${stationForCSV}.csv`, {
     download: true,
     header: true,

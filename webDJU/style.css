@@ -35,12 +35,22 @@ body {
   box-shadow: 20px -20px 60px #bebebe, -20px 20px 60px #ffffff;
 }
 
-.input {
+.inputs-container {
   grid-area: input;
   background-color: #e0e5ca;
   height: 100%;
   width: 100%;
   text-align: center;
+}
+
+.reload {
+  /* padding-left: 5px; */
+  height: 0px;
+}
+
+img {
+  height: 40px;
+  cursor: pointer;
 }
 
 .station {
@@ -63,14 +73,16 @@ body {
 
 .resultat {
   grid-area: resultat;
-  height: 420px;
+  height: 500px;
   background-color: rgb(0 0 0 / 82%);
 }
 
 .text {
+  
   color: white;
-  margin: 8px;
-  font-size: 15px;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  font-size: 18px;
 }
 
 .hiver {
