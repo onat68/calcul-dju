@@ -1,22 +1,31 @@
 let stations = new Array();
 let station = "";
+let resultatElement = document.getElementById("resultat");
+let stationElement = document.getElementById("station");
+let postalField = document.getElementById("postal-field");
+let info = document.getElementById("infos");
+let input = document.getElementById("input");
 
-const resultatElement = document.getElementById("resultat");
-const stationElement = document.getElementById("station");
-const postalField = document.getElementById("postal-field");
-const info = document.getElementById("infos");
-const input = document.getElementById("input");
+reset()
 
-postalField.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    findClosestStation(postalField.value);
-    postalField.value = "";
-  }
-});
+function reset () {
+  resultatElement = document.getElementById("resultat");
+  stationElement = document.getElementById("station");
+  postalField = document.getElementById("postal-field");
+  info = document.getElementById("infos");
+  input = document.getElementById("input");
+
+  postalField.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      findClosestStation(postalField.value);
+      postalField.value = "";
+    }
+  });
+}
 
 function findClosestStation (codePostal) {
-  // resultatElement.innerHTML = "";
-  // stationElement.innerHTML = "";
+  resultatElement.innerHTML = "";
+  stationElement.innerHTML = "";
   stations = new Array();
   console.log(codePostal);
 
