@@ -16,27 +16,25 @@ function reset() {
   resultatElement.innerHTML = "";
   stationElement.innerHTML = "";
   input.innerHTML =
-    '<div class="info" id="infos">Code postal</div><div class="form"><input type="field" id="postal-field" /></div>';
+    '<div class="info" id="infos">Code postal</div><div class="form"><input type="field" id="postal-field"></div>';
   postalField = document.getElementById("postal-field");
   info = document.getElementById("infos");
-
   reloadButton = document.getElementsByClassName("reload-button")[0];
 
   reloadButton.addEventListener("click", () => {
     reset();
   });
 
-  postalField.addEventListener("keypress", function (e) {
+  postalField.addEventListener("keypress",function(e) {
     if (e.key === "Enter") {
       findClosestStation(postalField.value);
       postalField.value = "";
     }
-  });
+  })
 }
 
 function findClosestStation(codePostal) {
   stations = new Array();
-  console.log(codePostal);
 
   fetch("../geoCommunes.json")
     .then((response) => response.json())
@@ -67,37 +65,66 @@ function displayStationElements() {
   </div>`;
 
   createStationElement();
+  const postalField = document.getElementById("postal-field");
 
-  input.addEventListener("keypress", function (e) {
+  function keyPressEvent (e) {
     if (e.key === "Enter" && stations.includes(station)) {
-      const postalField = document.getElementById("postal-field");
+      console.log(postalField.value)
       seuilRef = postalField.value;
-      console.log(seuilRef);
+      input.removeEventListener("keypress", keyPressEvent)
       startCalcul();
     }
-  });
+  }
+  input.addEventListener("keypress", keyPressEvent)
 }
 
 function createStationElement() {
-  stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
-  stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
 
-  firstChoice = document.getElementById("firstChoice");
-  secondChoice = document.getElementById("secondChoice");
+  if(stations[1]!=undefined){
+    stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
+    stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
 
-  firstChoice.addEventListener("click", () => {
-    secondChoice.className = "choice";
-    firstChoice.className = "choice selected";
-    station = stations[0];
-  });
-  secondChoice.addEventListener("click", () => {
-    firstChoice.className = "choice";
-    secondChoice.className = "choice selected";
-    station = stations[1];
-  });
+    const firstChoice = document.getElementById("firstChoice");
+    const secondChoice = document.getElementById("secondChoice");
+
+    firstChoice.addEventListener("click", () => {
+      secondChoice.className = "choice";
+      firstChoice.className = "choice selected";
+      station = stations[0];
+    });
+    secondChoice.addEventListener("click", () => {
+      firstChoice.className = "choice";
+      secondChoice.className = "choice selected";
+      station = stations[1];
+    });
+  }
+  else {
+    stationElement.innerHTML += `<div class="choice selected" id="uniqueChoice"><p class="choices">${stations[0]}</p></div>`
+    const uniqueChoice = document.getElementById('uniqueChoice')
+    uniqueChoice.style.height = '100%'
+    station = stations[0]
+  }
+
+  // stationElement.innerHTML += `<div class="choice" id="firstChoice"><p class="choices">${stations[0]}</p></div>`;
+  // stationElement.innerHTML += `<div class="choice" id="secondChoice"><p class="choices">${stations[1]}</p></div>`;
+
+  // firstChoice = document.getElementById("firstChoice");
+  // secondChoice = document.getElementById("secondChoice");
+
+  // firstChoice.addEventListener("click", () => {
+  //   secondChoice.className = "choice";
+  //   firstChoice.className = "choice selected";
+  //   station = stations[0];
+  // });
+  // secondChoice.addEventListener("click", () => {
+  //   firstChoice.className = "choice";
+  //   secondChoice.className = "choice selected";
+  //   station = stations[1];
+  // });
 }
 
 function startCalcul() {
+  console.log(seuilRef)
   let stationForCSV =
     station.split("-")[0].split("")[0].toUpperCase() +
     station.split("-")[0].slice(1);
