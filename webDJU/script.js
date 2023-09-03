@@ -6,7 +6,6 @@ let postalField = document.getElementById("postal-field");
 let info = document.getElementById("infos");
 let input = document.getElementById("input");
 let reloadButton = document.getElementsByClassName("reload-button")[0];
-console.log('cc')
 
 reset();
 
