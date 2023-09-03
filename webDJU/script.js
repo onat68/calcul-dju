@@ -6,6 +6,7 @@ let postalField = document.getElementById("postal-field");
 let info = document.getElementById("infos");
 let input = document.getElementById("input");
 let reloadButton = document.getElementsByClassName("reload-button")[0];
+console.log('cc')
 
 reset();
 
@@ -37,7 +38,7 @@ function reset() {
 function findClosestStation(codePostal) {
   stations = new Array();
 
-  fetch("./geoCommunes.json")
+  fetch("../geoCommunes.json")
     .then((response) => response.json())
     .then((JSCommunes) => {
       JSCommunes.forEach((element) => {
@@ -114,7 +115,7 @@ function startCalcul() {
     station.split("-")[0].slice(1);
 
   let dataStation = new Array();
-  Papa.parse(`./dataStations/data${stationForCSV}.csv`, {
+  Papa.parse(`../dataStations/data${stationForCSV}.csv`, {
     download: true,
     header: true,
     delimiter: ";",
