@@ -10,6 +10,7 @@ let reloadButton = document.getElementsByClassName("reload-button")[0];
 reset();
 
 function reset() {
+  sortedTemperature = []
   resultatElement = document.getElementById("resultat");
   stationElement = document.getElementById("station");
   input = document.getElementById("input");
