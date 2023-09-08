@@ -7,32 +7,16 @@ let info = document.getElementById("infos");
 let input = document.getElementById("input");
 let reloadButton = document.getElementsByClassName("reload-button")[0];
 
-reset();
+postalField.addEventListener("keypress",function(e) {
+  if (e.key === "Enter") {
+    findClosestStation(postalField.value);
+    postalField.value = "";
+  }
+})
 
-function reset() {
-  sortedTemperature = []
-  resultatElement = document.getElementById("resultat");
-  stationElement = document.getElementById("station");
-  input = document.getElementById("input");
-  resultatElement.innerHTML = "";
-  stationElement.innerHTML = "";
-  input.innerHTML =
-    '<div class="info" id="infos">Code postal</div><div class="form"><input type="field" id="postal-field"></div>';
-  postalField = document.getElementById("postal-field");
-  info = document.getElementById("infos");
-  reloadButton = document.getElementsByClassName("reload-button")[0];
-
-  reloadButton.addEventListener("click", () => {
-    reset();
-  });
-
-  postalField.addEventListener("keypress",function(e) {
-    if (e.key === "Enter") {
-      findClosestStation(postalField.value);
-      postalField.value = "";
-    }
-  })
-}
+reloadButton.addEventListener("click", () => {
+  location.reload();
+});
 
 function findClosestStation(codePostal) {
   stations = new Array();
