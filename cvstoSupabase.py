@@ -1,12 +1,17 @@
 import csv
 import os
 from supabase import create_client, Client
-connexion_string = os.environ.get('user=postgres host=db.nmxyqirvwoiefdrlliri.supabase.co port=5432 database=postgres')
 
-# url: str = os.environ.get("SUPABASE_URL")
-# key: str = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(connexion_string)
+url: str = "https://nmxyqirvwoiefdrlliri.supabase.co"
+key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5teHlxaXJ2d29pZWZkcmxsaXJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM3NjA0OTUsImV4cCI6MjAwOTMzNjQ5NX0.X1-4DmC8LZAyjHNA-GwP-kxuGqoZUo4yRR8agbmqXl4"
+supabase: Client = create_client(url, key)
+response = supabase.table('hey').select("salut").execute()
+print(response)
 
+
+# data, count = supabase.table('salut').insert({"id": 1, "salut": "salut"}).execute()
+
+print(response)
 
 files_path = []
 
@@ -43,8 +48,9 @@ def extractTemperatures(stationName) :
                 elif temperature > sorted_temperature[date]['tmax']:
                     sorted_temperature[date]['tmax']= temperature
 
-    # print(sorted_temperature)
+    print(sorted_temperature)
 
 
 # for file in files_path:
 #     extractTemperatures(file)
+
