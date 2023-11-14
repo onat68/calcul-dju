@@ -1,3 +1,12 @@
+let stations = new Array();
+let station = "";
+let resultatElement = document.getElementById("resultat")!;
+let stationElement = document.getElementById("station")!;
+let postalField = document.getElementById("postal-field")!;
+let info = document.getElementById("infos")!;
+let input = document.getElementById("input")!;
+let reloadButton = document.getElementsByClassName("reload-button")[0]!;
+
 let seuilRef=999
 
 class dayTemperatures {
@@ -80,8 +89,8 @@ const calculDJU = (tmin: number, tmax: number) => {
   })
   }
   
-  const extractWinterOf = (startYear: string, endYear: string) => {
-    let arrayOfWinter = new Array();
+  const extractWinterOf = (startYear: number, endYear: number) => {
+    let arrayOfWinter = [];
   
     let startDate = new Date(`${startYear}-10-01`);
     let endDate = new Date(`${endYear}-05-31`);
@@ -95,7 +104,7 @@ const calculDJU = (tmin: number, tmax: number) => {
     return arrayOfWinter;
   };
   
-  const calculDJUMoyen = (arrayOfDates: arrayOfResults) => {
+  const calculDJUMoyen = (arrayOfDates: dayTemperatures[]) => {
     let totalDJU = 0;
     for (const date in arrayOfDates) {
       totalDJU += arrayOfDates[date].DJU;
@@ -103,12 +112,12 @@ const calculDJU = (tmin: number, tmax: number) => {
     return totalDJU / Object.keys(sortedTemperature).length;
   };
   
-  const calculDJUDecennie = (startDate: string, endDate: string) => {
+  const calculDJUDecennie = (start: number, end: number) => {
     resultatElement.innerHTML = ""
     let DJUMoyenDecennie = 0;
     
-    startDate = parseInt(startDate) - 10;
-    endDate = parseInt(endDate) - 10;
+    let startDate: number = start - 10;
+    let endDate: number = end - 10;
     
     for (let i = 0; i < 10; i++) {
       let DJUMoyen = calculDJUMoyen(extractWinterOf(startDate + i, endDate + i))
