@@ -60,6 +60,7 @@ const extractTemperatures = (result) => {
             }
         }
     });
+    console.log(sortedTemperature['2013-04-06']);
 };
 const extractWinterOf = (startYear, endYear) => {
     let arrayOfWinter = [];
@@ -78,7 +79,8 @@ const calculDJUMoyen = (arrayOfDates) => {
     for (const date in arrayOfDates) {
         totalDJU += arrayOfDates[date].DJU;
     }
-    return totalDJU / Object.keys(sortedTemperature).length;
+    console.log(totalDJU);
+    return totalDJU / arrayOfDates.length;
 };
 const calculDJUDecennie = (start, end) => {
     resultatElement.innerHTML = "";

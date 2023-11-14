@@ -42,6 +42,7 @@ const calculDJU = (tmin, tmax) => {
         }
       }
   })
+  console.log(sortedTemperature['2013-04-06'])
   }
   
   const extractWinterOf = (startYear, endYear) => {
@@ -49,7 +50,7 @@ const calculDJU = (tmin, tmax) => {
   
     let startDate = new Date(`${startYear}-10-01`);
     let endDate = new Date(`${endYear}-05-31`);
-  
+    
     for (date in sortedTemperature) {
       let dateToCompare = new Date(date);
       if (startDate <= dateToCompare && dateToCompare <= endDate) {
@@ -64,6 +65,7 @@ const calculDJU = (tmin, tmax) => {
     for (date in arrayOfDates) {
       totalDJU += arrayOfDates[date].DJU;
     }
+    console.log(totalDJU)
     return totalDJU / arrayOfDates.length;
   };
   
