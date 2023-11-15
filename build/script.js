@@ -93,8 +93,6 @@ function startCalcul() {
   })
   .then((response) => response.json)
   .then((data) => {
-    // extractTemperatures(data);
-    sortedTemperature = data
     calculation();
   })
 
