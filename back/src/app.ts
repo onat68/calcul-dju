@@ -32,20 +32,7 @@ app.use((req, res, next) => {
     next();
   });
 
-app.get("/station/:station", async(req, res, next) => {
-  console.log(req.params.station)
-  let {data, error} = await supabase
-  .from("dataStation")
-  .select("*")
-  .eq("station_name", req.params.station)
-  
-  if(error){
-    res.status(500).json({ error })
-  }
-
-  res.status(200).json(data)
-
-})
+app.use("/", route)
 export default app
   
 

@@ -37,15 +37,9 @@ class resultEntry {
 
 interface arrayOfResults {
   [key: string]: dayTemperatures
-  // length: number = 0
-
-  // data: {[key: string]: any} = {} 
-  // length: number = 0
 }
 
-// let sortedTemperature = new arrayOfResults()
 let sortedTemperature: arrayOfResults
-// let sortedTemperature: dayTemperatures[]
 
 const calculDJU = (tmin: number, tmax: number) => {
     let moyenneTemp = (tmin + tmax) / 2;

@@ -24,9 +24,7 @@ class resultEntry {
         this.temperature = parseFloat(element.temperature);
     }
 }
-// let sortedTemperature = new arrayOfResults()
 let sortedTemperature;
-// let sortedTemperature: dayTemperatures[]
 const calculDJU = (tmin, tmax) => {
     let moyenneTemp = (tmin + tmax) / 2;
     if (seuilRef == 999) {
