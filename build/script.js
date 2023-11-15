@@ -1,41 +1,13 @@
-// let stations = new Array();
-// let station = "";
-// let resultatElement = document.getElementById("resultat");
-// let stationElement = document.getElementById("station");
-// let postalField = document.getElementById("postal-field");
-// let info = document.getElementById("infos");
-// let input = document.getElementById("input");
-// let reloadButton = document.getElementsByClassName("reload-button")[0];
+postalField.addEventListener("keypress",function(e) {
+  if (e.key === "Enter") {
+    findClosestStation(postalField.value);
+    postalField.value = "";
+  }
+})
 
-console.log("salut")
-
-reset();
-
-function reset() {
-  sortedTemperature = []
-  resultatElement = document.getElementById("resultat");
-  stationElement = document.getElementById("station");
-  input = document.getElementById("input");
-  resultatElement.innerHTML = "";
-  stationElement.innerHTML = "";
-  input.innerHTML =
-    '<div class="info" id="infos">Code postal</div><div class="form"><input type="field" id="postal-field"></div>';
-  postalField = document.getElementById("postal-field");
-  info = document.getElementById("infos");
-  reloadButton = document.getElementsByClassName("reload-button")[0];
-
-  reloadButton.addEventListener("click", () => {
-    reset();
-  });
-
-  postalField.addEventListener("keypress",function(e) {
-    if (e.key === "Enter") {
-
-      findClosestStation(postalField.value);
-      postalField.value = "";
-    }
-  })
-}
+reloadButton.addEventListener("click", () => {
+  location.reload();
+});
 
 function findClosestStation(codePostal) {
   stations = new Array();
@@ -111,22 +83,19 @@ function createStationElement() {
 }
 
 function startCalcul() {
-  console.log(seuilRef)
-  let stationForCSV =
+  console.log(seuilRef);
+  station =
     station.split("-")[0].split("")[0].toUpperCase() +
     station.split("-")[0].slice(1);
 
-  let dataStation = new Array();
-  Papa.parse(`../dataStations/data${stationForCSV}.csv`, {
-    download: true,
-    header: true,
-    delimiter: ";",
-    step: function (data) {
-      dataStation.push(data.data);
-    },
-    complete: function () {
-      extractTemperatures(dataStation);
-      calculation();
-    },
-  });
+  fetch(`http://localhost:3000/station/${station}`, {
+    method: "GET"
+  })
+  .then((response) => response.json)
+  .then((data) => {
+    // extractTemperatures(data);
+    sortedTemperature = data
+    calculation();
+  })
+
 }
