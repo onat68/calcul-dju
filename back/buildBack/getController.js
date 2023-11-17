@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDJUByWinter = exports.getByStation = void 0;
+exports.getDJUByWinter = exports.getCitiesByPostal = exports.getByStation = void 0;
 const app_1 = require("./app");
 const getByStation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { data, error } = yield app_1.supabase
@@ -22,6 +22,17 @@ const getByStation = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     res.status(200).json(data);
 });
 exports.getByStation = getByStation;
+const getCitiesByPostal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { data, error } = yield app_1.supabase
+        .from("communes")
+        .select("*")
+        .eq("postal", req.params.postal);
+    if (error) {
+        res.status(500).json({ error });
+    }
+    res.status(200).json(data);
+});
+exports.getCitiesByPostal = getCitiesByPostal;
 const calculDJU = (tmin, tmax, seuilRef) => {
     let moyenneTemp = (tmin + tmax) / 2;
     if (seuilRef == 999) {

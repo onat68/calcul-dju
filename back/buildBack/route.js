@@ -30,5 +30,6 @@ const express_1 = __importDefault(require("express"));
 const getController = __importStar(require("./getController.js"));
 const router = express_1.default.Router();
 router.get("/station/:station", getController.getByStation);
+router.get("/postal/:postal", getController.getCitiesByPostal);
 router.get("/dju/:station/:winter/:seuilRef", getController.getDJUByWinter);
 exports.default = router;

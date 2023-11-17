@@ -13,6 +13,19 @@ export const getByStation = async (req: any, res: any) => {
   res.status(200).json(data);
 };
 
+export const getCitiesByPostal = async (req: any, res: any) => {
+  let { data, error } = await supabase
+  .from("communes")
+  .select("*")
+  .eq("postal", req.params.postal)
+
+  if (error) {
+    res.status(500).json({ error })
+  }
+
+  res.status(200).json(data)
+}
+
 const calculDJU = (tmin: number, tmax: number, seuilRef: number): number => {
   let moyenneTemp = (tmin + tmax) / 2;
   if (seuilRef == 999) {
@@ -58,3 +71,5 @@ export const getDJUByWinter = async (req: any, res: any) => {
 
   res.status(200).json(DJUMoyen);
 };
+
+
