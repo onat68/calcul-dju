@@ -42,6 +42,8 @@ Dans la construction du code j'ai essayé au maximum de séparer les calculs en 
 
 La gestion de l'interface a aussi été au maximum décorrelée de ces calculs, dans la même optique de lisibilité et de maintenabilité.
 
+## Version 2
+
 Cette version implémante l'utilisation de **TypeScript** comme entrainement et introduction à ce langage, **Python** pour transformer les données et les ajouter dans une base de donnée **Supabase**. **NodeJS** et **Express** pour créer un back-end qui extrait les données de la base de donnée et **React** pour la partie front-end et gérer un affichage dynamique.
 
 Elle m'a permis de comprendre, avec le recul entre la première version et la seconde, l'intéret de ces technologies et qu'elles permettent un code bien plus efficace et plus lisible.
