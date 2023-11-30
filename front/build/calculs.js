@@ -8,6 +8,10 @@ let info = document.getElementById("infos");
 let input = document.getElementById("input");
 let reloadButton = document.getElementsByClassName("reload-button")[0];
 let seuilRef = 999;
+
+const setSeuilRef = (value) => {
+    seuilRef = value
+} 
 class dayTemperatures {
     constructor(date, tmin, tmax, DJU) {
         this.date = date;
@@ -100,3 +104,12 @@ const calculation = () => {
     resultatElement.innerHTML += `<div class="text"><p>Moyenne décennie : ${DJUMoyenDecennie}</p></div>`;
     resultatElement.innerHTML += `<div class="text"><p>Facteur de correction : ${DJUMoyenLastWinter / DJUMoyenDecennie}</p></div>`;
 };
+
+module.exports = {
+    calculDJU,
+    extractTemperatures,
+    extractWinterOf,
+    calculDJUMoyen,
+    calculDJUDecennie,
+    setSeuilRef
+}

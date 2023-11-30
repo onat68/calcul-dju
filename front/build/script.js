@@ -46,7 +46,7 @@ function displayStationElements() {
   function keyPressEvent (e) {
     if (e.key === "Enter" && stations.includes(station)) {
       console.log(postalField.value)
-      seuilRef = postalField.value;
+      setSeuilRef(postalField.value);
       input.removeEventListener("keypress", keyPressEvent)
       startCalcul();
     }
